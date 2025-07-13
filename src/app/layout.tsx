@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { Header } from '@/components/organisms/Header'
-import { Footer } from '@/components/organisms/Footer'
 import { ThemeProvider } from '@/contexts/ThemeContext'
+import { ClientLayoutWrapper } from '@/components/layouts/ClientLayoutWrapper'
 
 // Google FontsのInterフォントを読み込み（ラテン文字のみ）
 const inter = Inter({ subsets: ['latin'] })
@@ -36,19 +35,9 @@ export default function RootLayout({
       <body className={inter.className}>
         {/* グローバルテーマプロバイダーでアプリ全体をラップ */}
         <ThemeProvider>
-          {/* フルスクリーンレイアウト: ヘッダー、メイン、フッターで構成 */}
-          <div className="min-h-screen flex flex-col">
-            {/* サイトヘッダー（ナビゲーション含む） */}
-            <Header />
-            
-            {/* メインコンテンツエリア（各ページの内容） */}
-            <main className="flex-grow">
-              {children}
-            </main>
-            
-            {/* サイトフッター（SNSリンク、コピーライト含む） */}
-            <Footer />
-          </div>
+          <ClientLayoutWrapper>
+            {children}
+          </ClientLayoutWrapper>
         </ThemeProvider>
       </body>
     </html>
