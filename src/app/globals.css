@@ -1,18 +1,25 @@
+/* Tailwind CSSのベーススタイル、コンポーネント、ユーティリティをインポート */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ベーススタイルのカスタマイズ */
 @layer base {
+  /* スムーズスクロールを全体に適用 */
   html {
     @apply scroll-smooth;
   }
   
+  /* ボディの背景色とテキスト色をdaisyUIのテーマに合わせる */
   body {
     @apply bg-base-100 text-base-content;
   }
 }
 
+/* カスタムコンポーネントスタイル */
 @layer components {
+  /* シャボン玉風ホバーエフェクト */
+  /* WorkCardコンポーネントで使用される */
   .bubble-card {
     @apply transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl;
   }
