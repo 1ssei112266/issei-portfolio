@@ -1,14 +1,14 @@
 import { WorkCard } from '@/components/molecules/WorkCard'
 import { BlogCard } from '@/components/molecules/BlogCard'
-import { Button } from '@/components/atoms/Button'
 import { Link } from '@/components/atoms/Link'
+import { Hero } from '@/components/organisms/Hero'
 import { getFeaturedWorks } from '@/lib/works'
 import { getZennArticles } from '@/lib/zenn'
 
 /**
  * ホームページコンポーネント
  * サイトのトップページで、以下のセクションで構成:
- * 1. ヒーローセクション: サイトタイトルと簡単な紹介
+ * 1. Heroセクション: インパクトのあるファーストビュー（浮遊する泡のアニメーション付き）
  * 2. 最近の作品: 注目作品をカード形式で表示
  * 3. Zenn最新記事: 技術ブログの最新記事を表示
  */
@@ -20,30 +20,12 @@ export default async function HomePage() {
   const zennArticles = await getZennArticles()
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      {/* ヒーローセクション: サイトのメインメッセージとCTAボタン */}
-      <section className="text-center mb-16">
-        <h1 className="text-5xl font-bold text-primary mb-6">
-          Issei Suzuki's Portfolio
-        </h1>
-        <p className="text-xl text-base-content/80 mb-8 max-w-2xl mx-auto">
-          フロントエンド開発者として、モダンなWeb技術を使って<br />
-          ユーザーフレンドリーなアプリケーションを作成しています。
-        </p>
-        {/* CTAボタン: 主要なアクションへのリンク */}
-        <div className="flex gap-4 justify-center">
-          <Link href="/works">
-            <Button variant="primary" size="lg">
-              作品を見る
-            </Button>
-          </Link>
-          <Link href="/about">
-            <Button variant="ghost" size="lg">
-              プロフィール
-            </Button>
-          </Link>
-        </div>
-      </section>
+    <>
+      {/* Heroセクション: アニメーション付きのインパクトあるファーストビュー */}
+      <Hero />
+      
+      {/* メインコンテンツ */}
+      <div className="container mx-auto px-4 py-16">
 
       {/* 最近の作品セクション: 注目作品をカード形式で表示 */}
       <section className="mb-16">
@@ -91,6 +73,7 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
-    </div>
+      </div>
+    </>
   )
 }
