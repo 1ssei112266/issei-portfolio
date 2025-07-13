@@ -1,36 +1,351 @@
+'use client'
+
 import { Link } from '../atoms/Link'
+import { motion } from 'framer-motion'
+
+/**
+ * フッターコンポーネント
+ * 
+ * 機能:
+ * - シャボン玉テーマに合わせた遊び心のあるデザイン
+ * - 15個の浮遊する泡の背景アニメーション
+ * - 3つのバブルカード（Navigation、Connect、About Me）
+ * - インタラクティブなSNSアイコン（絵文字使用）
+ * - 浮遊する装飾要素とアニメーション効果
+ * - レスポンシブ対応
+ * - 温かみのあるコピーライト表示
+ */
 
 export const Footer = () => {
+  // 動的に現在の年を取得
+  const currentYear = new Date().getFullYear()
+  
+  // SSR対応：固定のプロパティでランダム性を表現
+  const bubbleProperties = Array.from({ length: 15 }, (_, i) => ({
+    width: 20 + (i * 7) % 40,
+    height: 20 + (i * 9) % 40,
+    left: (i * 23) % 100,
+    top: (i * 17) % 100,
+    duration: 6 + (i % 4),
+    delay: (i % 3),
+    opacity: 0.1 + (i % 3) * 0.05
+  }))
+  
   return (
-    <footer className="footer footer-center p-10 bg-base-200 text-base-content">
-      <nav className="grid grid-flow-col gap-4">
-        <Link href="/" className="link link-hover">Home</Link>
-        <Link href="/works" className="link link-hover">Works</Link> 
-        <Link href="/about" className="link link-hover">About</Link>
-        <Link href="/blog" className="link link-hover">Blog</Link>
-      </nav>
-      <nav>
-        <div className="grid grid-flow-col gap-4">
-          <Link href="https://github.com/isseisuzuki" external>
-            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-          </Link>
-          <Link href="https://twitter.com/isseisuzuki" external>
-            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-              <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-            </svg>
-          </Link>
-          <Link href="mailto:contact@example.com" external>
-            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-              <path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z"/>
-            </svg>
-          </Link>
+    <footer className="relative bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 overflow-hidden">
+      {/* Floating bubble background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {bubbleProperties.map((bubble, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-gradient-to-r from-primary/10 to-secondary/10"
+            style={{
+              width: `${bubble.width}px`,
+              height: `${bubble.height}px`,
+              left: `${bubble.left}%`,
+              top: `${bubble.top}%`,
+            }}
+            animate={{
+              y: [-20, 20, -20],
+              x: [-10, 10, -10],
+              opacity: [0.2, 0.5, 0.2],
+              scale: [1, 1.3, 1],
+              rotate: [0, 180, 360]
+            }}
+            transition={{
+              duration: bubble.duration,
+              repeat: Infinity,
+              delay: bubble.delay,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Main content */}
+      <div className="container mx-auto px-6 py-16 relative z-10">
+        {/* Header section with floating elements */}
+        <motion.div 
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <motion.div
+            className="flex items-center justify-center gap-4 mb-6"
+            whileHover={{ scale: 1.02 }}
+          >
+            <motion.div
+              className="w-6 h-6 bg-gradient-to-r from-primary to-secondary rounded-full"
+              animate={{
+                y: [-3, 3, -3],
+                rotate: [0, 180, 360]
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+            <motion.h3 
+              className="text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent"
+              whileHover={{ 
+                scale: 1.05
+              }}
+              transition={{ type: "spring", stiffness: 300, damping: 10 }}
+            >
+              Thanks for visiting! 🫧
+            </motion.h3>
+            <motion.div
+              className="w-4 h-4 bg-gradient-to-r from-accent to-primary rounded-full"
+              animate={{
+                y: [3, -3, 3],
+                rotate: [360, 180, 0]
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1
+              }}
+            />
+          </motion.div>
+          <motion.p 
+            className="text-base-content/60 max-w-lg mx-auto text-lg leading-relaxed"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            シャボン玉のように軽やかで美しい<br />
+            <span className="text-primary font-medium">Web体験</span>をお届けします ✨
+          </motion.p>
+        </motion.div>
+
+        {/* Bubble-styled content sections */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          {/* Navigation bubble */}
+          <motion.div 
+            className="bg-base-100/60 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-base-200/30"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+            whileHover={{ 
+              y: -5,
+              boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
+            }}
+          >
+            <h4 className="font-bold text-primary mb-4 text-center text-lg flex items-center justify-center gap-2">
+              <span>🗺️</span> Navigation
+            </h4>
+            <nav className="space-y-3">
+              {[
+                { href: "/about", label: "About", icon: "👤" },
+                { href: "/works", label: "Works", icon: "💼" },
+                { href: "/blog", label: "Blog", icon: "📝" },
+                { href: "/thinking", label: "Thinking", icon: "💭" }
+              ].map((item, index) => (
+                <motion.div
+                  key={item.href}
+                  whileHover={{ 
+                    x: 10, 
+                    scale: 1.05
+                  }}
+                  transition={{ duration: 0.2 }}
+                  className="rounded-2xl p-2 hover:bg-primary/10"
+                >
+                  <Link 
+                    href={item.href} 
+                    className="flex items-center gap-3 text-base-content/70 hover:text-primary transition-colors"
+                  >
+                    <span className="text-lg">{item.icon}</span>
+                    <span className="font-medium">{item.label}</span>
+                  </Link>
+                </motion.div>
+              ))}
+            </nav>
+          </motion.div>
+          
+          {/* Connect bubble */}
+          <motion.div 
+            className="bg-base-100/60 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-base-200/30"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+            whileHover={{ 
+              y: -5,
+              boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
+            }}
+          >
+            <h4 className="font-bold text-secondary mb-4 text-center text-lg flex items-center justify-center gap-2">
+              <span>🌐</span> Connect
+            </h4>
+            <div className="flex justify-center space-x-4">
+              {[
+                { 
+                  href: "https://github.com/1ssei112266", 
+                  label: "GitHub",
+                  emoji: "🐙",
+                  color: "hover:bg-gray-100"
+                },
+                { 
+                  href: "https://twitter.com/isseisuzuki", 
+                  label: "Twitter",
+                  emoji: "🐦",
+                  color: "hover:bg-blue-100"
+                },
+                { 
+                  href: "https://zenn.dev/isseisuzuki", 
+                  label: "Zenn",
+                  emoji: "📚",
+                  color: "hover:bg-green-100"
+                },
+                { 
+                  href: "mailto:contact@example.com", 
+                  label: "Email",
+                  emoji: "✉️",
+                  color: "hover:bg-red-100"
+                }
+              ].map((social, index) => (
+                <motion.div
+                  key={social.href}
+                  whileHover={{ 
+                    scale: 1.2,
+                    rotate: [0, -10, 10, 0],
+                    y: -5
+                  }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ 
+                    type: "spring", 
+                    stiffness: 400, 
+                    damping: 10 
+                  }}
+                >
+                  <Link 
+                    href={social.href} 
+                    external
+                    className={`w-12 h-12 rounded-full bg-base-200/50 ${social.color} flex items-center justify-center text-xl transition-all duration-300 shadow-md border-2 border-base-200/30`}
+                    aria-label={social.label}
+                  >
+                    {social.emoji}
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Profile bubble */}
+          <motion.div 
+            className="bg-base-100/60 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-base-200/30"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            viewport={{ once: true }}
+            whileHover={{ 
+              y: -5,
+              boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
+            }}
+          >
+            <h4 className="font-bold text-accent mb-4 text-center text-lg flex items-center justify-center gap-2">
+              <span>💭</span> About Me
+            </h4>
+            <div className="text-center space-y-3">
+              <motion.div
+                className="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto flex items-center justify-center text-2xl shadow-lg"
+                animate={{
+                  rotate: [0, 5, -5, 0]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                👨‍💻
+              </motion.div>
+              <p className="text-base-content/70 text-sm leading-relaxed">
+                <span className="font-semibold text-primary">Issei Suzuki</span><br />
+                Frontend Engineer<br />
+                <span className="text-xs">Always creating with joy! 🎨</span>
+              </p>
+            </div>
+          </motion.div>
         </div>
-      </nav>
-      <aside>
-        <p>Copyright © 2024 - Issei Suzuki</p>
-      </aside>
+        
+        {/* Floating divider */}
+        <motion.div 
+          className="flex items-center justify-center my-8"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <motion.div 
+            className="flex space-x-2"
+            animate={{
+              y: [0, -5, 0]
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            {[...Array(5)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="w-2 h-2 bg-gradient-to-r from-primary to-secondary rounded-full"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.5, 1, 0.5]
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  delay: i * 0.2,
+                  ease: "easeInOut"
+                }}
+              />
+            ))}
+          </motion.div>
+        </motion.div>
+        
+        {/* Bottom message */}
+        <motion.div 
+          className="text-center space-y-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1 }}
+          viewport={{ once: true }}
+        >
+          <motion.p 
+            className="text-sm text-base-content/50 hover:text-primary/80"
+            whileHover={{ 
+              scale: 1.05
+            }}
+            transition={{ duration: 0.2 }}
+          >
+            © {currentYear} Issei Suzuki. Made with ❤️ & lots of ☕<br />
+            <span className="text-xs">Built with Next.js • Tailwind CSS • Framer Motion</span><br />
+            <motion.span 
+              className="text-primary/60 text-xs"
+              animate={{
+                opacity: [0.5, 1, 0.5]
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
+              ✨ Designed with Claude AI • シャボン玉のように軽やかに ✨
+            </motion.span>
+          </motion.p>
+        </motion.div>
+      </div>
     </footer>
   )
 }

@@ -11,6 +11,7 @@ interface NavLinkProps {
   href: string // リンク先URL
   children: React.ReactNode // リンクテキスト
   className?: string // 追加のCSSクラス
+  onClick?: () => void // クリック時のコールバック関数（オプション）
 }
 
 /**
@@ -22,7 +23,7 @@ interface NavLinkProps {
  * @param children - リンクテキスト
  * @param className - 追加のCSSクラス
  */
-export const NavLink = ({ href, children, className = '' }: NavLinkProps) => {
+export const NavLink = ({ href, children, className = '', onClick }: NavLinkProps) => {
   // 現在のページパスを取得（Next.js App Routerのフック）
   const pathname = usePathname()
   
@@ -32,6 +33,7 @@ export const NavLink = ({ href, children, className = '' }: NavLinkProps) => {
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={`
         ${className}
         ${

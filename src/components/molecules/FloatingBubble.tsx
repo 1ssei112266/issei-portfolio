@@ -52,7 +52,7 @@ export const FloatingBubble = ({
     rotate: [0, 15, -10, 8, -12, 0], // より大きな回転
     scale: [1, 1.05, 0.95, 1.02, 1], // サイズも少し変化
     transition: {
-      duration: 6 + Math.random() * 4, // 6〜10秒の間でより長い周期
+      duration: 6 + (delay % 4), // 6〜10秒の間でより長い周期（SSR対応）
       repeat: Infinity, // 無限ループ
       ease: "easeInOut", // なめらかな動き
       delay: delay // 指定された遅延時間
