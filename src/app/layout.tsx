@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Header } from '@/components/organisms/Header'
 import { Footer } from '@/components/organisms/Footer'
+import { ThemeProvider } from '@/contexts/ThemeContext'
 
 // Google FontsのInterフォントを読み込み（ラテン文字のみ）
 const inter = Inter({ subsets: ['latin'] })
@@ -33,19 +34,22 @@ export default function RootLayout({
     // 日本語設定とdaisyUIのcupcakeテーマを適用
     <html lang="ja" data-theme="cupcake">
       <body className={inter.className}>
-        {/* フルスクリーンレイアウト: ヘッダー、メイン、フッターで構成 */}
-        <div className="min-h-screen flex flex-col">
-          {/* サイトヘッダー（ナビゲーション含む） */}
-          <Header />
-          
-          {/* メインコンテンツエリア（各ページの内容） */}
-          <main className="flex-grow">
-            {children}
-          </main>
-          
-          {/* サイトフッター（SNSリンク、コピーライト含む） */}
-          <Footer />
-        </div>
+        {/* グローバルテーマプロバイダーでアプリ全体をラップ */}
+        <ThemeProvider>
+          {/* フルスクリーンレイアウト: ヘッダー、メイン、フッターで構成 */}
+          <div className="min-h-screen flex flex-col">
+            {/* サイトヘッダー（ナビゲーション含む） */}
+            <Header />
+            
+            {/* メインコンテンツエリア（各ページの内容） */}
+            <main className="flex-grow">
+              {children}
+            </main>
+            
+            {/* サイトフッター（SNSリンク、コピーライト含む） */}
+            <Footer />
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   )

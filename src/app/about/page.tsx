@@ -1,5 +1,6 @@
 import { Card } from "@/components/atoms/Card";
 import { Link } from "@/components/atoms/Link";
+import { PageBackground } from '@/components/organisms/PageBackground';
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -46,7 +47,8 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <PageBackground showBubbles={false}>
+      <div className="container mx-auto px-4 py-12">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <section className="text-center mb-16">
@@ -145,6 +147,7 @@ export default function AboutPage() {
           </Card>
         </section>
       </div>
-    </div>
+      </div>
+    </PageBackground>
   );
 }

@@ -1,4 +1,5 @@
 import { BlogCard } from '@/components/molecules/BlogCard'
+import { PageBackground } from '@/components/organisms/PageBackground'
 import { getZennArticles } from '@/lib/zenn'
 import type { Metadata } from 'next'
 
@@ -11,14 +12,15 @@ export default async function BlogPage() {
   const articles = await getZennArticles()
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <section className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-primary mb-4">ブログ</h1>
-        <p className="text-lg text-base-content/80 max-w-2xl mx-auto">
-          技術に関する記事や学んだことを Zenn で発信しています。<br />
-          Web開発、React、Next.js、TypeScriptなどのトピックを中心に執筆しています。
-        </p>
-      </section>
+    <PageBackground showBubbles={false}>
+      <div className="container mx-auto px-4 py-12">
+        <section className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-primary mb-4">ブログ</h1>
+          <p className="text-lg text-base-content/80 max-w-2xl mx-auto">
+            技術に関する記事や学んだことを Zenn で発信しています。<br />
+            Web開発、React、Next.js、TypeScriptなどのトピックを中心に執筆しています。
+          </p>
+        </section>
 
       <section>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -64,7 +66,8 @@ export default async function BlogPage() {
             </div>
           </div>
         </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </PageBackground>
   )
 }
