@@ -1,26 +1,45 @@
+'use client'
+
 import { BlogCard } from '@/components/molecules/BlogCard'
-import { PageBackground } from '@/components/organisms/PageBackground'
 import { getZennArticles } from '@/lib/zenn'
-import type { Metadata } from 'next'
+import { useEffect, useState } from 'react'
 
-export const metadata: Metadata = {
-  title: 'ブログ | Issei Suzuki\'s Portfolio',
-  description: 'Issei SuzukiのZenn記事一覧ページです。技術に関する記事を投稿しています。',
-}
+export const BlogSection = () => {
+  const [articles, setArticles] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
-export default async function BlogPage() {
-  const articles = await getZennArticles()
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const data = await getZennArticles()
+        setArticles(data)
+      } catch (error) {
+        console.error('Failed to fetch articles:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchArticles()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="text-center py-16">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    )
+  }
 
   return (
-    <PageBackground showBubbles={false}>
-      <div className="container mx-auto px-4 py-12">
-        <section className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-primary mb-4">ブログ</h1>
-          <p className="text-lg text-base-content/80 max-w-2xl mx-auto">
-            技術に関する記事や学んだことを Zenn で発信しています。<br />
-            Web開発、React、Next.js、TypeScriptなどのトピックを中心に執筆しています。
-          </p>
-        </section>
+    <div>
+      <section className="text-center mb-12">
+        <h2 className="text-3xl font-bold text-primary mb-4">ブログ</h2>
+        <p className="text-lg text-base-content/80 max-w-2xl mx-auto">
+          技術に関する記事や学んだことを Zenn で発信しています。<br />
+          Web開発、React、Next.js、TypeScriptなどのトピックを中心に執筆しています。
+        </p>
+      </section>
 
       <section>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -66,8 +85,7 @@ export default async function BlogPage() {
             </div>
           </div>
         </div>
-        </section>
-      </div>
-    </PageBackground>
+      </section>
+    </div>
   )
 }

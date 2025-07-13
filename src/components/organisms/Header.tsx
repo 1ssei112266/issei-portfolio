@@ -16,44 +16,87 @@ import { useEffect, useState } from 'react'
  * - レスポンシブ対応（モバイルではハンバーガーメニュー）
  */
 export const Header = () => {
-  // スクロール位置を監視
-  const [scrollY, setScrollY] = useState(0)
-  // ヘッダーの表示状態を管理
   const [isHeaderVisible, setIsHeaderVisible] = useState(true)
+  const [prevScrollY, setPrevScrollY] = useState(0)
+  const [keepVisible, setKeepVisible] = useState(false)
   
-  // スクロールイベントの監視
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
-      setScrollY(currentScrollY)
       
-      // 300px以上スクロールしたらヘッダーを隠す
-      // これにより左上のフローティングハンバーガーメニューが表示される
-      if (currentScrollY > 300) {
+      // モバイルでは常に非表示（ハンバーガーメニューを使用）
+      const isMobile = window.innerWidth < 768 // md breakpoint
+      
+      if (isMobile) {
         setIsHeaderVisible(false)
-      } else {
+        setPrevScrollY(currentScrollY)
+        return
+      }
+      
+      // ヘッダーを強制表示中は隠さない
+      if (keepVisible) {
+        setIsHeaderVisible(true)
+        setPrevScrollY(currentScrollY)
+        return
+      }
+      
+      // デスクトップでのスクロール対応ヘッダーロジック
+      // 50px未満のスクロールは無視（UX向上のため）
+      if (Math.abs(currentScrollY - prevScrollY) < 50) {
+        return
+      }
+
+      // スクロール方向を判定
+      const isScrollingDown = currentScrollY > prevScrollY
+      const isScrollingUp = currentScrollY < prevScrollY
+
+      // 下スクロールでヘッダーを隠す、上スクロールで表示
+      if (isScrollingDown && currentScrollY > 50) {
+        setIsHeaderVisible(false)
+      } else if (isScrollingUp) {
         setIsHeaderVisible(true)
       }
+
+      setPrevScrollY(currentScrollY)
     }
     
+    const handleNavigateToSection = (event: CustomEvent) => {
+      // ナビゲーションクリック時はヘッダーを表示したまま保持
+      setKeepVisible(true)
+      setIsHeaderVisible(true)
+      
+      // 1.5秒後に通常のスクロール動作に戻る
+      setTimeout(() => {
+        setKeepVisible(false)
+      }, 1500)
+    }
+    
+    // 初回実行とリサイズ時の処理
+    handleScroll()
+    
     window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    window.addEventListener('resize', handleScroll)
+    window.addEventListener('navigate-to-section', handleNavigateToSection as EventListener)
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+      window.removeEventListener('navigate-to-section', handleNavigateToSection as EventListener)
+    }
+  }, [prevScrollY, keepVisible])
   
   return (
     <>
       <motion.header 
-      className="sticky top-0 z-50 transition-all duration-300 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20"
+      className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 md:block hidden"
       initial={{ y: -100 }}
       animate={{ 
         y: isHeaderVisible ? 0 : -100,
         opacity: isHeaderVisible ? 1 : 0
       }}
       transition={{ 
-        duration: 0.4, 
-        type: "spring", 
-        stiffness: 300, 
-        damping: 25 
+        duration: 0.3, 
+        ease: "easeInOut"
       }}
     >
       {/* 上部に隙間を作るためのコンテナ */}
@@ -69,11 +112,14 @@ export const Header = () => {
             
             {/* ロゴエリア（左側） */}
             <div className="flex items-center gap-3">
-              <NavLink href="/" className="flex items-center">
+              <button 
+                onClick={() => window.dispatchEvent(new CustomEvent('back-to-home'))}
+                className="flex items-center hover:opacity-80 transition-opacity"
+              >
                 <div className="text-xl font-bold text-gray-800">
                   Issei Suzuki
                 </div>
-              </NavLink>
+              </button>
               
               {/* 
                 ロゴ横の浮遊する泡アニメーション
@@ -98,13 +144,13 @@ export const Header = () => {
             {/* デスクトップ用ナビゲーション（中央） */}
             <nav className="hidden md:flex items-center space-x-6">
               {[
-                { href: "/about", label: "About" },
-                { href: "/works", label: "Works" },
-                { href: "/blog", label: "Blog" }, 
-                { href: "/thinking", label: "Thinking" }
+                { section: "about", label: "About" },
+                { section: "works", label: "Works" },
+                { section: "blog", label: "Blog" }, 
+                { section: "thinking", label: "Thinking" }
               ].map((item) => (
                 <motion.div
-                  key={item.href}
+                  key={item.section}
                   whileHover={{ 
                     scale: 1.1,
                     y: -2
@@ -116,12 +162,14 @@ export const Header = () => {
                     damping: 10
                   }}
                 >
-                  <NavLink 
-                    href={item.href} 
+                  <button 
+                    onClick={() => {
+                      window.dispatchEvent(new CustomEvent('navigate-to-section', { detail: item.section }))
+                    }}
                     className="text-gray-700 hover:text-gray-900 text-sm font-medium transition-colors duration-200 px-3 py-2 rounded-full hover:bg-gray-50 block"
                   >
                     {item.label}
-                  </NavLink>
+                  </button>
                 </motion.div>
               ))}
             </nav>

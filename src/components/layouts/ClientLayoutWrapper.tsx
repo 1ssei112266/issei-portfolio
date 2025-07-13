@@ -26,13 +26,39 @@ interface ClientLayoutWrapperProps {
 export const ClientLayoutWrapper = ({ children }: ClientLayoutWrapperProps) => {
   // スクロール位置を監視（フローティングメニューの表示制御に使用）
   const [scrollY, setScrollY] = useState(0)
+  const [prevScrollY, setPrevScrollY] = useState(0)
+  const [isHamburgerVisible, setIsHamburgerVisible] = useState(false)
 
   // スクロールイベントリスナーの設定
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY)
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      setScrollY(currentScrollY)
+      
+      // ハンバーガーメニューの表示ロジック
+      // - モバイルのみ：常に表示
+      // - デスクトップ：表示しない（ヘッダーを使用）
+      const isMobile = window.innerWidth < 768 // md breakpoint
+      
+      if (isMobile) {
+        setIsHamburgerVisible(true)
+      } else {
+        setIsHamburgerVisible(false)
+      }
+      
+      setPrevScrollY(currentScrollY)
+    }
+    
+    // 初回実行とリサイズ時の処理
+    handleScroll()
+    
     window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    window.addEventListener('resize', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
+  }, [prevScrollY])
 
   return (
     <>
@@ -50,7 +76,7 @@ export const ClientLayoutWrapper = ({ children }: ClientLayoutWrapperProps) => {
         <Footer />
 
         {/* フローティングハンバーガーメニュー（左上） */}
-        <FloatingHamburgerMenu isVisible={scrollY > 300} />
+        <FloatingHamburgerMenu isVisible={isHamburgerVisible} />
       </div>
     </>
   )
