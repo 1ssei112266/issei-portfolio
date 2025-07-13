@@ -1,0 +1,41 @@
+[
+  {
+    "id": "1",
+    "title": "E-Commerce Platform",
+    "slug": "ecommerce-platform",
+    "description": "Next.js と Stripe を使った現代的なEコマースプラットフォーム。レスポンシブデザインと高速なページロードを実現。",
+    "image": "/images/ecommerce-platform.png",
+    "technologies": ["Next.js", "TypeScript", "Stripe", "Tailwind CSS", "Prisma", "PostgreSQL"],
+    "githubUrl": "https://github.com/isseisuzuki/ecommerce-platform",
+    "demoUrl": "https://ecommerce-platform-demo.vercel.app",
+    "featured": true,
+    "publishedAt": "2024-01-15",
+    "content": "このプロジェクトでは、最新のWeb技術を使用してスケーラブルなEコマースプラットフォームを構築しました。Next.js 14のApp Routerを使用し、Stripeの決済システムを統合。パフォーマンスとSEOを重視した設計になっています。"
+  },
+  {
+    "id": "2", 
+    "title": "Task Management App",
+    "slug": "task-management-app",
+    "description": "React と Node.js で構築されたリアルタイムタスク管理アプリケーション。チーム協働機能とカンバンボード機能を搭載。",
+    "image": "/images/task-management-app.png",
+    "technologies": ["React", "Node.js", "Socket.io", "MongoDB", "Express", "Material-UI"],
+    "githubUrl": "https://github.com/isseisuzuki/task-management-app",
+    "demoUrl": "https://task-management-demo.netlify.app",
+    "featured": true,
+    "publishedAt": "2023-11-20",
+    "content": "リアルタイム通信を活用したタスク管理アプリケーション。Socket.ioを使用してリアルタイムでタスクの更新を同期し、チームでの協働作業を円滑にします。ドラッグアンドドロップによる直感的な操作性を実現。"
+  },
+  {
+    "id": "3",
+    "title": "Weather Dashboard",
+    "slug": "weather-dashboard", 
+    "description": "Vue.js で作成された天気予報ダッシュボード。OpenWeatherMap APIを使用して世界各地の天気情報を表示。",
+    "image": "/images/weather-dashboard.png",
+    "technologies": ["Vue.js", "Vuetify", "Chart.js", "OpenWeatherMap API", "PWA"],
+    "githubUrl": "https://github.com/isseisuzuki/weather-dashboard",
+    "demoUrl": "https://weather-dashboard-demo.surge.sh",
+    "featured": false,
+    "publishedAt": "2023-09-10",
+    "content": "PWA対応の天気予報ダッシュボード。Chart.jsを使用した美しいデータ視覚化と、Vuetifyによるマテリアルデザインを採用。オフライン機能にも対応しています。"
+  }
+]

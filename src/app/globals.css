@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply bg-base-100 text-base-content;
+  }
+}
+
+@layer components {
+  .bubble-card {
+    @apply transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl;
+  }
+}
