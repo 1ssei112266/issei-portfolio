@@ -115,16 +115,22 @@ export const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.8 }}
           >
-            <Link href="/works">
-              <Button variant="primary" size="lg" className="min-w-[160px]">
-                作品を見る
-              </Button>
-            </Link>
-            <Link href="/about">
-              <Button variant="ghost" size="lg" className="min-w-[160px]">
-                プロフィール
-              </Button>
-            </Link>
+            <Button 
+              variant="primary" 
+              size="lg" 
+              className="min-w-[160px]"
+              onClick={() => window.dispatchEvent(new CustomEvent('navigate-to-section', { detail: 'works' }))}
+            >
+              作品を見る
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="lg" 
+              className="min-w-[160px]"
+              onClick={() => window.dispatchEvent(new CustomEvent('navigate-to-section', { detail: 'about' }))}
+            >
+              プロフィール
+            </Button>
           </motion.div>
         </motion.div>
 

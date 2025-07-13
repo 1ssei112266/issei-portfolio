@@ -26,10 +26,10 @@ export const FloatingHamburgerMenu = ({ isVisible }: FloatingHamburgerMenuProps)
 
   // ナビゲーションメニュー項目の定義
   const menuItems = [
-    { href: "/about", label: "About", icon: "👤" },
-    { href: "/works", label: "Works", icon: "💼" },
-    { href: "/blog", label: "Blog", icon: "📝" },
-    { href: "/thinking", label: "Thinking", icon: "💭" }
+    { section: "about", label: "About", icon: "👤" },
+    { section: "works", label: "Works", icon: "💼" },
+    { section: "blog", label: "Blog", icon: "📝" },
+    { section: "thinking", label: "Thinking", icon: "💭" }
   ]
 
   // メニューの開閉を切り替える関数
@@ -59,7 +59,7 @@ export const FloatingHamburgerMenu = ({ isVisible }: FloatingHamburgerMenuProps)
               >
                 {menuItems.map((item, index) => (
                   <motion.div
-                    key={item.href}
+                    key={item.section}
                     initial={{ scale: 0, x: -50 }}
                     animate={{ scale: 1, x: 0 }}
                     exit={{ scale: 0, x: -50 }}
@@ -71,16 +71,18 @@ export const FloatingHamburgerMenu = ({ isVisible }: FloatingHamburgerMenuProps)
                     }}
                     className="flex justify-start"
                   >
-                    <NavLink
-                      href={item.href}
+                    <button
+                      onClick={() => {
+                        window.dispatchEvent(new CustomEvent('navigate-to-section', { detail: item.section }))
+                        setIsOpen(false)
+                      }}
                       className="flex items-center gap-3 px-4 py-3 bg-base-100/95 backdrop-blur-md rounded-full shadow-xl border border-base-200/30 hover:bg-primary/10 hover:border-primary/50 hover:scale-105 transition-all duration-300 w-full"
-                      onClick={() => setIsOpen(false)}
                     >
                       <span className="text-lg">{item.icon}</span>
                       <span className="text-base font-medium text-base-content/80">
                         {item.label}
                       </span>
-                    </NavLink>
+                    </button>
                   </motion.div>
                 ))}
               </motion.div>
